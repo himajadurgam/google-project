@@ -1,0 +1,18 @@
+College Institutional Information
+
+Admissions:
+Students can contact the college admissions office for admission-related queries.
+
+Academic Information:
+Students should contact their respective department for academic-related information.
+
+Examinations:
+Students should contact the examination cell for examination schedules, hall tickets, and examination-related queries.
+
+Library:
+Students can contact the library for information about books, borrowing, and library services.
+
+Hostel:
+Students can contact the hostel administration for hostel-related queries.
+
+For information not available in the institutional documents, the assistant should clearly state that the information is not available.

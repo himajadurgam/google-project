@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Student Support Assistant</title>
+
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 700px;
+            margin: 60px auto;
+            padding: 20px;
+        }
+
+        h1 {
+            text-align: center;
+        }
+
+        .chat {
+            margin-top: 30px;
+        }
+
+        input {
+            width: 70%;
+            padding: 12px;
+            font-size: 16px;
+        }
+
+        button {
+            padding: 12px 20px;
+            font-size: 16px;
+            cursor: pointer;
+        }
+
+        #answer {
+            margin-top: 25px;
+            padding: 15px;
+            background: #f4f4f4;
+            border-radius: 8px;
+            min-height: 30px;
+        }
+    </style>
+</head>
+
+<body>
+
+    <h1>Student Support Assistant</h1>
+
+    <div class="chat">
+        <input
+            id="question"
+            type="text"
+            placeholder="Ask your question..."
+        >
+
+        <button onclick="askQuestion()">Ask</button>
+
+        <div id="answer"></div>
+    </div>
+
+    <script>
+        async function askQuestion() {
+
+            const question = document.getElementById("question").value;
+            const answer = document.getElementById("answer");
+
+            if (!question) {
+                answer.textContent = "Please enter a question.";
+                return;
+            }
+
+            answer.textContent = "Thinking...";
+
+            try {
+
+                const response = await fetch(
+                    "http://127.0.0.1:8000/ask",
+                    {
+                        method: "POST",
+                        headers: {
+                            "Content-Type": "application/json"
+                        },
+                        body: JSON.stringify({
+                            question: question
+                        })
+                    }
+                );
+
+                const data = await response.json();
+
+                answer.textContent = data.answer;
+
+            } catch (error) {
+
+                answer.textContent =
+                    "Could not connect to the server.";
+
+            }
+        }
+    </script>
+
+</body>
+</html>
