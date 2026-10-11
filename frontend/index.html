@@ -1,102 +1,966 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-    <title>Student Support Assistant</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            max-width: 700px;
-            margin: 60px auto;
-            padding: 20px;
-        }
+<title>KL Student Support Assistant</title>
 
-        h1 {
-            text-align: center;
-        }
+<style>
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
 
-        .chat {
-            margin-top: 30px;
-        }
+:root {
+    --red: #c41e3a;
+    --dark-red: #a91530;
+    --light-red: #fff1f4;
+    --bg: #f5f7fb;
+    --text: #171717;
+    --muted: #747474;
+    --border: #e8e8e8;
+    --white: #ffffff;
+}
 
-        input {
-            width: 70%;
-            padding: 12px;
-            font-size: 16px;
-        }
+body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI",
+                 Roboto, Helvetica, Arial, sans-serif;
+    background:
+        radial-gradient(circle at top left, #fff3f5 0%, transparent 35%),
+        radial-gradient(circle at bottom right, #eef2ff 0%, transparent 35%),
+        var(--bg);
+    min-height: 100vh;
+    color: var(--text);
+}
 
-        button {
-            padding: 12px 20px;
-            font-size: 16px;
-            cursor: pointer;
-        }
+/* =========================
+   APP
+========================= */
 
-        #answer {
-            margin-top: 25px;
-            padding: 15px;
-            background: #f4f4f4;
-            border-radius: 8px;
-            min-height: 30px;
-        }
-    </style>
+.app {
+    width: min(1180px, 94vw);
+    height: min(900px, 94vh);
+    margin: 3vh auto;
+    background: var(--white);
+    border-radius: 24px;
+    overflow: hidden;
+    box-shadow:
+        0 25px 70px rgba(0, 0, 0, 0.10),
+        0 5px 20px rgba(0, 0, 0, 0.04);
+    display: flex;
+    flex-direction: column;
+    border: 1px solid rgba(0,0,0,0.05);
+}
+
+/* =========================
+   TOP HEADER
+========================= */
+
+.top-header {
+    height: 105px;
+    background: linear-gradient(135deg, #b51232, #d52948);
+    color: white;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 34px;
+}
+
+.brand-area {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+}
+
+.brand-symbol {
+    width: 55px;
+    height: 55px;
+    border-radius: 16px;
+    background: rgba(255,255,255,0.17);
+    border: 1px solid rgba(255,255,255,0.3);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 27px;
+    backdrop-filter: blur(8px);
+}
+
+.brand-title {
+    font-size: 25px;
+    font-weight: 750;
+    letter-spacing: -0.5px;
+}
+
+.brand-subtitle {
+    margin-top: 4px;
+    font-size: 13px;
+    opacity: 0.86;
+}
+
+.header-badge {
+    background: rgba(255,255,255,0.15);
+    border: 1px solid rgba(255,255,255,0.25);
+    padding: 9px 15px;
+    border-radius: 999px;
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 0.4px;
+}
+
+/* =========================
+   ASSISTANT BAR
+========================= */
+
+.assistant-bar {
+    height: 82px;
+    border-bottom: 1px solid var(--border);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 34px;
+    background: #fff;
+}
+
+.assistant-info {
+    display: flex;
+    align-items: center;
+    gap: 13px;
+}
+
+.ai-icon {
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
+    background: var(--light-red);
+    color: var(--red);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 21px;
+    border: 1px solid #ffd8df;
+}
+
+.assistant-name {
+    font-weight: 700;
+    font-size: 15px;
+}
+
+.status {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    color: #777;
+    font-size: 12px;
+    margin-top: 3px;
+}
+
+.status-dot {
+    width: 7px;
+    height: 7px;
+    background: #20b779;
+    border-radius: 50%;
+    box-shadow: 0 0 0 3px #e9faf3;
+}
+
+.ai-label {
+    font-size: 11px;
+    font-weight: 800;
+    color: var(--red);
+    background: var(--light-red);
+    padding: 8px 13px;
+    border-radius: 999px;
+    letter-spacing: 0.5px;
+}
+
+/* =========================
+   CHAT AREA
+========================= */
+
+.chat-area {
+    flex: 1;
+    overflow-y: auto;
+    padding: 30px 34px;
+    background:
+        linear-gradient(rgba(255,255,255,0.96), rgba(255,255,255,0.96)),
+        radial-gradient(circle at 20% 20%, #ffecef, transparent 30%);
+}
+
+.chat-area::-webkit-scrollbar {
+    width: 7px;
+}
+
+.chat-area::-webkit-scrollbar-thumb {
+    background: #ddd;
+    border-radius: 10px;
+}
+
+/* =========================
+   WELCOME
+========================= */
+
+.welcome {
+    max-width: 760px;
+    margin: 10px auto 32px;
+    text-align: center;
+}
+
+.welcome-icon {
+    width: 65px;
+    height: 65px;
+    border-radius: 20px;
+    margin: 0 auto 18px;
+    background: linear-gradient(135deg, #c41e3a, #e13a59);
+    color: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 29px;
+    box-shadow: 0 12px 25px rgba(196,30,58,0.20);
+}
+
+.welcome h1 {
+    font-size: 27px;
+    letter-spacing: -0.7px;
+    margin-bottom: 9px;
+}
+
+.welcome p {
+    color: var(--muted);
+    font-size: 14px;
+    line-height: 1.6;
+}
+
+/* =========================
+   QUICK QUESTIONS
+========================= */
+
+.quick-title {
+    text-align: center;
+    font-size: 12px;
+    color: #999;
+    font-weight: 700;
+    margin-bottom: 13px;
+    text-transform: uppercase;
+    letter-spacing: 0.8px;
+}
+
+.quick-grid {
+    max-width: 850px;
+    margin: 0 auto 25px;
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 11px;
+}
+
+.quick-card {
+    background: white;
+    border: 1px solid #e9e9e9;
+    border-radius: 13px;
+    padding: 15px 12px;
+    cursor: pointer;
+    transition: 0.2s ease;
+    text-align: left;
+}
+
+.quick-card:hover {
+    border-color: #e4a1ad;
+    transform: translateY(-2px);
+    box-shadow: 0 8px 20px rgba(0,0,0,0.06);
+}
+
+.quick-icon {
+    font-size: 19px;
+    margin-bottom: 9px;
+}
+
+.quick-card strong {
+    display: block;
+    font-size: 13px;
+    margin-bottom: 4px;
+}
+
+.quick-card span {
+    color: #888;
+    font-size: 11px;
+    line-height: 1.4;
+}
+
+/* =========================
+   MESSAGES
+========================= */
+
+.message-row {
+    display: flex;
+    margin: 16px 0;
+    animation: appear 0.25s ease;
+}
+
+.message-row.user {
+    justify-content: flex-end;
+}
+
+.message-row.assistant {
+    justify-content: flex-start;
+}
+
+.message {
+    max-width: 75%;
+    padding: 14px 17px;
+    border-radius: 17px;
+    font-size: 14px;
+    line-height: 1.6;
+    white-space: pre-wrap;
+}
+
+.message.user {
+    background: linear-gradient(135deg, #b71936, #ce2947);
+    color: white;
+    border-bottom-right-radius: 5px;
+    box-shadow: 0 6px 15px rgba(183,25,54,0.16);
+}
+
+.message.assistant {
+    background: #ffffff;
+    color: #292929;
+    border: 1px solid #e7e7e7;
+    border-bottom-left-radius: 5px;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.04);
+}
+
+/* =========================
+   TYPING
+========================= */
+
+.typing {
+    display: none;
+    align-items: center;
+    gap: 5px;
+    width: fit-content;
+    padding: 13px 17px;
+    background: white;
+    border: 1px solid #e7e7e7;
+    border-radius: 16px;
+    margin-top: 10px;
+}
+
+.typing span {
+    width: 6px;
+    height: 6px;
+    background: #aaa;
+    border-radius: 50%;
+    animation: bounce 1.2s infinite;
+}
+
+.typing span:nth-child(2) {
+    animation-delay: 0.15s;
+}
+
+.typing span:nth-child(3) {
+    animation-delay: 0.3s;
+}
+
+/* =========================
+   INPUT
+========================= */
+
+.input-section {
+    border-top: 1px solid var(--border);
+    padding: 17px 28px 12px;
+    background: white;
+}
+
+.input-box {
+    max-width: 1000px;
+    margin: auto;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    border: 1px solid #ddd;
+    border-radius: 17px;
+    padding: 7px 8px 7px 18px;
+    transition: 0.2s;
+    background: #fafafa;
+}
+
+.input-box:focus-within {
+    border-color: #d04a61;
+    background: white;
+    box-shadow: 0 0 0 4px rgba(196,30,58,0.07);
+}
+
+#questionInput {
+    flex: 1;
+    border: none;
+    outline: none;
+    background: transparent;
+    font-size: 14px;
+    padding: 10px 0;
+    color: #222;
+}
+
+#questionInput::placeholder {
+    color: #aaa;
+}
+
+.ask-btn {
+    border: none;
+    background: linear-gradient(135deg, #b71936, #ce2947);
+    color: white;
+    font-weight: 700;
+    padding: 11px 21px;
+    border-radius: 12px;
+    cursor: pointer;
+    transition: 0.2s;
+}
+
+.ask-btn:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 6px 15px rgba(183,25,54,0.22);
+}
+
+.ask-btn:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+    transform: none;
+}
+
+.footer-info {
+    max-width: 1000px;
+    margin: 8px auto 0;
+    display: flex;
+    justify-content: space-between;
+    color: #aaa;
+    font-size: 10px;
+}
+
+.clear-btn {
+    cursor: pointer;
+    color: #888;
+}
+
+.clear-btn:hover {
+    color: var(--red);
+}
+
+/* =========================
+   ANIMATIONS
+========================= */
+
+@keyframes appear {
+    from {
+        opacity: 0;
+        transform: translateY(7px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes bounce {
+    0%, 60%, 100% {
+        transform: translateY(0);
+    }
+    30% {
+        transform: translateY(-5px);
+    }
+}
+
+/* =========================
+   MOBILE
+========================= */
+
+@media (max-width: 800px) {
+
+    .app {
+        width: 100%;
+        height: 100vh;
+        margin: 0;
+        border-radius: 0;
+    }
+
+    .top-header {
+        padding: 0 20px;
+        height: 90px;
+    }
+
+    .brand-title {
+        font-size: 20px;
+    }
+
+    .header-badge {
+        display: none;
+    }
+
+    .assistant-bar {
+        padding: 0 20px;
+    }
+
+    .chat-area {
+        padding: 24px 17px;
+    }
+
+    .quick-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    .message {
+        max-width: 88%;
+    }
+
+    .input-section {
+        padding: 12px;
+    }
+
+    .footer-info {
+        padding: 0 4px;
+    }
+}
+
+@media (max-width: 480px) {
+
+    .welcome h1 {
+        font-size: 23px;
+    }
+
+    .quick-grid {
+        grid-template-columns: 1fr 1fr;
+    }
+
+    .quick-card span {
+        display: none;
+    }
+
+    .message {
+        max-width: 92%;
+    }
+
+    .ask-btn {
+        padding: 11px 16px;
+    }
+}
+</style>
 </head>
 
 <body>
 
-    <h1>Student Support Assistant</h1>
+<div class="app">
 
-    <div class="chat">
-        <input
-            id="question"
-            type="text"
-            placeholder="Ask your question..."
-        >
+    <!-- HEADER -->
+    <header class="top-header">
 
-        <button onclick="askQuestion()">Ask</button>
+        <div class="brand-area">
 
-        <div id="answer"></div>
+            <div class="brand-symbol">
+                🎓
+            </div>
+
+            <div>
+                <div class="brand-title">
+                    KL Student Support
+                </div>
+
+                <div class="brand-subtitle">
+                    Your campus questions, answered.
+                </div>
+            </div>
+
+        </div>
+
+        <div class="header-badge">
+            CAMPUS AI ASSISTANT
+        </div>
+
+    </header>
+
+
+    <!-- ASSISTANT BAR -->
+    <div class="assistant-bar">
+
+        <div class="assistant-info">
+
+            <div class="ai-icon">
+                ✦
+            </div>
+
+            <div>
+                <div class="assistant-name">
+                    KL Support Assistant
+                </div>
+
+                <div class="status">
+                    <span class="status-dot"></span>
+                    Online · Ready to help
+                </div>
+            </div>
+
+        </div>
+
+        <div class="ai-label">
+            AI ASSISTANT
+        </div>
+
     </div>
 
-    <script>
-        async function askQuestion() {
 
-            const question = document.getElementById("question").value;
-            const answer = document.getElementById("answer");
+    <!-- CHAT -->
+    <main class="chat-area" id="chatArea">
 
-            if (!question) {
-                answer.textContent = "Please enter a question.";
-                return;
-            }
+        <div id="welcomeSection">
 
-            answer.textContent = "Thinking...";
+            <div class="welcome">
 
-            try {
+                <div class="welcome-icon">
+                    ✦
+                </div>
 
-                const response = await fetch(
-                    "http://127.0.0.1:8000/ask",
-                    {
-                        method: "POST",
-                        headers: {
-                            "Content-Type": "application/json"
-                        },
-                        body: JSON.stringify({
-                            question: question
-                        })
-                    }
-                );
+                <h1>
+                    How can I help you today?
+                </h1>
 
-                const data = await response.json();
+                <p>
+                    Ask questions about academics, examinations,
+                    grading, library services, admissions and other
+                    information available in institutional documents.
+                </p>
 
-                answer.textContent = data.answer;
+            </div>
 
-            } catch (error) {
 
-                answer.textContent =
-                    "Could not connect to the server.";
+            <div class="quick-title">
+                Popular questions
+            </div>
 
-            }
+
+            <div class="quick-grid">
+
+                <div class="quick-card"
+                     onclick="askQuestion('Where should I go if I have a question about my exams?')">
+
+                    <div class="quick-icon">📝</div>
+
+                    <strong>
+                        Examination
+                    </strong>
+
+                    <span>
+                        Exams, hall tickets and related information
+                    </span>
+
+                </div>
+
+
+                <div class="quick-card"
+                     onclick="askQuestion('I scored 85 marks. Which grade does that correspond to?')">
+
+                    <div class="quick-icon">🎯</div>
+
+                    <strong>
+                        Grading
+                    </strong>
+
+                    <span>
+                        Grades and academic performance
+                    </span>
+
+                </div>
+
+
+                <div class="quick-card"
+                     onclick="askQuestion('What are the rules for borrowing books from the library?')">
+
+                    <div class="quick-icon">📚</div>
+
+                    <strong>
+                        Library
+                    </strong>
+
+                    <span>
+                        Books, borrowing and library services
+                    </span>
+
+                </div>
+
+
+                <div class="quick-card"
+                     onclick="focusInput()">
+
+                    <div class="quick-icon">💬</div>
+
+                    <strong>
+                        Ask anything
+                    </strong>
+
+                    <span>
+                        Ask your own campus question
+                    </span>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <!-- MESSAGES -->
+        <div id="messages"></div>
+
+
+        <!-- TYPING -->
+        <div class="typing" id="typing">
+
+            <span></span>
+            <span></span>
+            <span></span>
+
+        </div>
+
+    </main>
+
+
+    <!-- INPUT -->
+    <section class="input-section">
+
+        <div class="input-box">
+
+            <input
+                id="questionInput"
+                type="text"
+                placeholder="Ask anything about KL University..."
+                autocomplete="off"
+            >
+
+            <button
+                class="ask-btn"
+                id="askButton"
+                onclick="sendQuestion()"
+            >
+                Ask
+            </button>
+
+        </div>
+
+
+        <div class="footer-info">
+
+            <span>
+                Answers are generated from available institutional documents.
+            </span>
+
+            <span
+                class="clear-btn"
+                onclick="clearChat()"
+            >
+                Clear chat
+            </span>
+
+        </div>
+
+    </section>
+
+</div>
+
+
+<script>
+
+const API_URL = "http://127.0.0.1:8000/ask";
+
+const input = document.getElementById("questionInput");
+const askButton = document.getElementById("askButton");
+const messages = document.getElementById("messages");
+const typing = document.getElementById("typing");
+const welcomeSection = document.getElementById("welcomeSection");
+const chatArea = document.getElementById("chatArea");
+
+
+/* =========================
+   ASK QUESTION
+========================= */
+
+async function sendQuestion() {
+
+    const question = input.value.trim();
+
+    if (!question) {
+        return;
+    }
+
+    addMessage(question, "user");
+
+    input.value = "";
+
+    welcomeSection.style.display = "none";
+
+    askButton.disabled = true;
+    input.disabled = true;
+
+    showTyping();
+
+    try {
+
+        const response = await fetch(API_URL, {
+
+            method: "POST",
+
+            headers: {
+                "Content-Type": "application/json"
+            },
+
+            body: JSON.stringify({
+                question: question
+            })
+
+        });
+
+
+        if (!response.ok) {
+            throw new Error("Server error");
         }
-    </script>
+
+
+        const data = await response.json();
+
+        hideTyping();
+
+        addMessage(
+            data.answer || "Sorry, I could not generate an answer.",
+            "assistant"
+        );
+
+    }
+
+    catch (error) {
+
+        hideTyping();
+
+        addMessage(
+            "Unable to connect to the support assistant. Please make sure the backend server is running.",
+            "assistant"
+        );
+
+        console.error(error);
+
+    }
+
+    finally {
+
+        askButton.disabled = false;
+        input.disabled = false;
+
+        input.focus();
+
+    }
+}
+
+
+/* =========================
+   QUICK QUESTIONS
+========================= */
+
+function askQuestion(question) {
+
+    input.value = question;
+
+    sendQuestion();
+
+}
+
+
+/* =========================
+   ADD MESSAGE
+========================= */
+
+function addMessage(text, type) {
+
+    const row = document.createElement("div");
+
+    row.className = `message-row ${type}`;
+
+
+    const bubble = document.createElement("div");
+
+    bubble.className = `message ${type}`;
+
+    bubble.textContent = text;
+
+
+    row.appendChild(bubble);
+
+    messages.appendChild(row);
+
+
+    setTimeout(() => {
+
+        chatArea.scrollTo({
+            top: chatArea.scrollHeight,
+            behavior: "smooth"
+        });
+
+    }, 50);
+
+}
+
+
+/* =========================
+   TYPING
+========================= */
+
+function showTyping() {
+
+    typing.style.display = "flex";
+
+    chatArea.scrollTo({
+        top: chatArea.scrollHeight,
+        behavior: "smooth"
+    });
+
+}
+
+
+function hideTyping() {
+
+    typing.style.display = "none";
+
+}
+
+
+/* =========================
+   INPUT
+========================= */
+
+input.addEventListener("keydown", function(event) {
+
+    if (event.key === "Enter") {
+        sendQuestion();
+    }
+
+});
+
+
+function focusInput() {
+
+    input.focus();
+
+}
+
+
+/* =========================
+   CLEAR CHAT
+========================= */
+
+function clearChat() {
+
+    messages.innerHTML = "";
+
+    welcomeSection.style.display = "block";
+
+    input.focus();
+
+}
+
+</script>
 
 </body>
 </html>
