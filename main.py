@@ -288,10 +288,6 @@ class Question(BaseModel):
     question: str
 
 
-@app.on_event("startup")
-def startup_event():
-    build_knowledge_base()
-
 
 @app.get("/")
 def home():
@@ -302,6 +298,9 @@ def home():
 def ask_question(data: Question):
 
     question = data.question.strip()
+
+    if vectorizer is None:
+        build_knowledge_base()
 
     if not question:
         return {"answer": "Please enter a question."}
